@@ -1,8 +1,6 @@
 //  The following is inspired by :
 //  http://alvinalexander.com/blog/post/java/java-program-consume-all-memory-ram-on-computer
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 public class MemoryEater {

@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>PodsController</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+
+
+<h1>Running pods : </h1>
+
+<table border="3">
+    <tr><th>name</th><th>containers ready</th><th>waiting</th><th>delete</th></tr>
+    <tr th:each="pod : ${pods}">
+        <td th:text="${pod.metadata.name}"></td>
+        <td>
+            <span style="display: block;" th:each="containerStatus : ${pod.status.containerStatuses}" th:text="${containerStatus.ready}">
+                <br />
+            </span>
+        </td>
+        <td>
+            <span style="display: block;" th:each="containerStatus : ${pod.status.containerStatuses}" th:text="${containerStatus != null ? containerStatus.state.waiting : ''}">
+                <br />
+            </span>
+        </td>
+        <td>
+            <form id="form" action="/" method="post" role="form">
+                <input type="hidden" name="name" th:value="${pod.metadata.name}"/>
+                <button type="submit" value="delete" >delete</button>
+            </form>
+
+        </td>
+    </tr>
+</table>
+
+
+</body>
+</html>
