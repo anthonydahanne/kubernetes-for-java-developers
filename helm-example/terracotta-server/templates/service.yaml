@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "terracotta-server.fullname" . }}
+  labels:
+    app: {{ template "terracotta-server.name" . }}
+    chart: {{ template "terracotta-server.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: terracotta-port
+      protocol: TCP
+      name: terracotta-port
+  selector:
+    app: {{ template "terracotta-server.name" . }}
+    release: {{ .Release.Name }}

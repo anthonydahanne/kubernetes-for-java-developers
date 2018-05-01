@@ -1,0 +1,75 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "fullstack.fullname" . }}
+  labels:
+    app: {{ template "fullstack.name" . }}
+    chart: {{ template "fullstack.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fullstack.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullstack.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: prod, k8s
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://{{ .Release.Name }}-mysql:3306/demo?useUnicode=true&characterEncoding=utf8&useSSL=false
+          - name: JAVA_OPTS
+            value: "-Xmx1024m -Xms256m"
+          - name: JHIPSTER_SLEEP
+            value: "10"
+          - name: APPLICATION_CLUSTER_URI
+            value: "terracotta://{{ .Release.Name }}-terracotta-server:9410/demo-entity"
+          - name: APPLICATION_STUBWEBSERVICES
+            value: "false"
+          - name: APPLICATION_GOOGLEAPIKEY
+            value: {{ .Values.googleApiKey | quote}}
+          - name: APPLICATION_DARKSKYAPIKEY
+            value: {{ .Values.darkskyApiKey | quote}}
+          - name: APPLICATION_BIOGRAPHIESREMOTELOCATION
+            value: "http://blog.dahanne.net/wp-content/uploads/biographies.list.light.gz"
+          - name: APPLICATION_BIOGRAPHIES_LOCATION
+            value: "biographies.list.light.gz"
+          - name: MANAGEMENT_SECURITY_ENABLED
+            value: "FALSE"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+          livenessProbe:
+            httpGet:
+              path: /management/health
+              port: http
+            initialDelaySeconds: 180
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
