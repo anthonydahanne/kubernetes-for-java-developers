@@ -1,13 +1,12 @@
 import java.util.concurrent.TimeUnit;
 
+@SuppressWarnings("ALL")
 public class SimpleJavaApplication {
   public static void main(String[] args) throws InterruptedException {
     while(true) {
-      System.out.println("Hello Montreal");
-      System.out.println("Allo tout le monde === :-)");
+      System.out.println("Bonjour Montreal JUG!");
       TimeUnit.SECONDS.sleep(1L);
     }
-
   }
 
 
