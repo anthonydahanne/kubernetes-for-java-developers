@@ -1,6 +1,6 @@
 # Kubernetes for Java Developers
 
-## [Memory Eater](./memory-eater/)
+## [Memory Eater](./memoryeater/)
 
 Example to demonstrate the importance of 2 recent JVM options to give the JVM awareness of cgroups limitation in the current container :
 
@@ -16,4 +16,4 @@ Sample Helm examples to create Helm charts for the open source Terracotta server
 
 ## [Kubernetes client](./kubernetes-client)
 
-A simple webapp,
+A simple webapp, to showcase [the Java Kubernetes API](https://github.com/kubernetes-client/java)
